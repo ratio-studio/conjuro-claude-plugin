@@ -31,6 +31,7 @@ If you need a `projectId`, get it from `conjuro_list_projects` rather than guess
 Search first: if a matching task already exists, offer to update it with `conjuro_update_task` instead of creating a duplicate.
 
 1. Collect the task name. Only ask for other details (project, due date as `YYYY-MM-DD`, priority, notes) when the user mentioned them or they matter.
+   For a category, call `conjuro_list_categories` with `kind: "task"` and pass the chosen `id` as `categoryId`. Each category has the workspace's `notes` on when to use it and may name a `defaultOwner`; choose by the notes, use the `isDefault` one when nothing fits better, and ask the user when two fit. Never invent an id.
 2. Show the user what you will create (name, project, due date, anything else you set) and wait for a clear yes.
 3. Call `conjuro_create_task`. It requires an `idempotencyKey` (8–200 characters): generate a fresh random one (for example a UUID) for each new task. If the call fails or times out and you retry the **same** task, reuse the same key so Conjuro doesn't create a duplicate.
 4. Report the result. The tool reads the task back and returns a short summary (`verbose: true` returns the full record); say whether it was `confirmed`.
@@ -41,7 +42,7 @@ Use this to keep an existing task current (a new due date, a blocker, a new owne
 
 1. Identify the exact task with `conjuro_search_tasks` or `conjuro_get_task`.
 2. Confirm the change with the user ("Move *Send Q3 invoice* to 31 October?").
-3. Call `conjuro_update_task` with the `taskId` and only the fields that change: `name`, `notes` (replaces) or `appendNote` (adds a dated line, preferred for progress and blockers), `status` (`Pending`, `In Progress`, `Waiting`), `priority`, `dueDate`, `timeframe`, `ownerId`, `waitingReason`, `waitingOnId`, `waitingCheckAgainAt`, `milestone`. Setting `status: "Waiting"` needs a `waitingReason`. Pass an `idempotencyKey` if you may retry.
+3. Call `conjuro_update_task` with the `taskId` and only the fields that change: `name`, `notes` (replaces) or `appendNote` (adds a dated line, preferred for progress and blockers), `status` (`Pending`, `In Progress`, `Waiting`), `priority`, `dueDate`, `timeframe`, `ownerId`, `waitingReason`, `waitingOnId`, `waitingCheckAgainAt`, `milestone`, `categoryId` (from `conjuro_list_categories`). Setting `status: "Waiting"` needs a `waitingReason`. Pass an `idempotencyKey` if you may retry.
 4. The result lists the `changed` fields. If it says `confirmed: false`, tell the user which fields in `unconfirmed` Conjuro didn't show yet.
 
 ## Slipping tasks
