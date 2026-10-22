@@ -14,12 +14,10 @@ This repository is also a plugin marketplace named `conjuro`, so you can install
 
 ## Install
 
-> Replace `OWNER` below with the GitHub account that hosts this repository.
-
 ### Terminal (Claude Code CLI)
 
 ```bash
-claude plugin marketplace add OWNER/conjuro-claude-plugin
+claude plugin marketplace add ratio-studio/conjuro-claude-plugin
 ```
 
 ```bash
@@ -29,7 +27,7 @@ claude plugin install conjuro@conjuro
 Or both in one step (Claude Code v2.1.292 or later):
 
 ```bash
-claude plugin install conjuro --marketplace OWNER/conjuro-claude-plugin
+claude plugin install conjuro --marketplace ratio-studio/conjuro-claude-plugin
 ```
 
 Then start `claude`, run `/mcp`, select `plugin:conjuro:conjuro`, and choose **Authenticate**. Your browser opens Conjuro: sign in, check the workspace and permissions on the consent screen, and approve. You can also sign in from the shell with `claude mcp login plugin:conjuro:conjuro`.
@@ -39,7 +37,7 @@ Then start `claude`, run `/mcp`, select `plugin:conjuro:conjuro`, and choose **A
 The desktop app's Code tab uses the same Claude Code plugins as the terminal, so a plugin installed with the commands above is already available there. To install from inside a session instead, type:
 
 ```text
-/plugin install conjuro --marketplace OWNER/conjuro-claude-plugin
+/plugin install conjuro --marketplace ratio-studio/conjuro-claude-plugin
 ```
 
 Then type `/mcp`, choose `plugin:conjuro:conjuro`, and authenticate in the browser window that opens.
