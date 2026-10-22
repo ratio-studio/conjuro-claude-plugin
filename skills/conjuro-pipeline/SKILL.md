@@ -11,15 +11,15 @@ Use the Conjuro MCP server (`plugin:conjuro:conjuro`) to read and change leads a
 
 | Action | Tools | Permission |
 |---|---|---|
-| Find customers, read stages, categories, sources | `conjuro.search_customers`, `conjuro.get_pipeline_options` | Read customers (granted by default) |
-| Create, update, move, archive leads | `conjuro.create_lead`, `conjuro.update_lead`, `conjuro.move_lead`, `conjuro.archive_lead` | **Create, update, move, and archive leads and customers** (off by default) |
+| Find customers, read stages, categories, sources | `conjuro_search_customers`, `conjuro_get_pipeline_options` | Read customers (granted by default) |
+| Create, update, move, archive leads | `conjuro_create_lead`, `conjuro_update_lead`, `conjuro_move_lead`, `conjuro_archive_lead` | **Create, update, move, and archive leads and customers** (off by default) |
 
-If a write tool is missing or refused for lack of permission, tell the user to turn on that permission in Conjuro under **Account → Agent connections → Manage permissions** for this connection, then try again.
+If a write tool is missing or returns `[permission_missing:conjuro.crm.write]`, tell the user to turn on that permission in Conjuro under **Account → Agent connections → Manage permissions** for this connection, then try again.
 
 ## Look things up first
 
-- Call `conjuro.get_pipeline_options` before any write that needs a stage, category, or source. Use only ids it returns; never invent one.
-- Find the customer with `conjuro.search_customers`. If more than one matches, ask the user which.
+- Call `conjuro_get_pipeline_options` before any write that needs a stage, category, or source. Use only ids it returns; never invent one.
+- Find the customer with `conjuro_search_customers`. If more than one matches, ask the user which.
 
 ## Confirm every change
 
@@ -34,12 +34,12 @@ One confirmation covers one change. For a batch, list every change and get a yes
 
 ## Make the change
 
-- `conjuro.create_lead`: `name`, optional `stageId`, other fields as agreed, and a fresh `idempotencyKey` (8–200 characters, e.g. a UUID). Reuse the same key only when retrying the same lead after a failure.
-- `conjuro.update_lead`: `customerId` plus **only** the fields that change. Conjuro merges them into the current record. To archive, use `conjuro.archive_lead`, not `status`.
-- `conjuro.move_lead`: `customerId` and the target `stageId`.
-- `conjuro.archive_lead`: `customerId`. This is destructive; never archive without explicit confirmation.
+- `conjuro_create_lead`: `name`, optional `stageId`, other fields as agreed, and a fresh `idempotencyKey` (8–200 characters, e.g. a UUID). Reuse the same key only when retrying the same lead after a failure.
+- `conjuro_update_lead`: `customerId` plus **only** the fields that change. Conjuro merges them into the current record. To archive, use `conjuro_archive_lead`, not `status`.
+- `conjuro_move_lead`: `customerId` and the target `stageId`.
+- `conjuro_archive_lead`: `customerId`. This is destructive; never archive without explicit confirmation.
 
-Each tool reads the record back. Tell the user whether the change was confirmed.
+Each tool reads the record back and returns a short summary (`verbose: true` returns the full record). Tell the user whether the change was `confirmed`. Errors start with a code in brackets; on `[auth_expired]` ask the user to reconnect Conjuro, and on `[rate_limited]` stop and try later.
 
 ## Notes
 
