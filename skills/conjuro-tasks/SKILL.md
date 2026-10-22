@@ -1,6 +1,6 @@
 ---
 name: conjuro-tasks
-description: Find, create, update, and complete tasks and milestones in Conjuro. Use when the user asks about their Conjuro tasks, to-dos, milestones, what is due or overdue, or wants to add, change, or finish a task.
+description: Find, create, update, and complete tasks and milestones in Conjuro. Use when the user asks about their Conjuro tasks, to-dos, milestones, what is due, what is slipping, or wants to add, change, or finish a task.
 ---
 
 # Conjuro tasks
@@ -19,7 +19,7 @@ If a write tool is missing or returns `[permission_missing:conjuro.tasks.write]`
 
 ## Find tasks
 
-1. Call `conjuro_search_tasks` with a short `query` (matched against task name, notes, project, customer, and owner). Narrow with `projectId`, `status`, `ownerId`, `dueAfter` / `dueBefore` (`YYYY-MM-DD`, inclusive), `overdue: true`, or `milestone: true`. For example, "what's due this week" is `dueAfter` today and `dueBefore` the end of the week; "what's overdue for Tony" is `overdue: true` with Tony's `ownerId` (from `owner.id` in earlier results).
+1. Call `conjuro_search_tasks` with a short `query` (matched against task name, notes, project, customer, and owner). Narrow with `projectId`, `status`, `ownerId`, `dueAfter` / `dueBefore` (`YYYY-MM-DD`, inclusive), `slipping: true`, or `milestone: true`. For example, "what's due this week" is `dueAfter` today and `dueBefore` the end of the week; "what's slipping for Tony" is `slipping: true` with Tony's `ownerId` (from `owner.id` in earlier results).
 2. Results are sorted by due date (`sort: "created"` for newest first). `total` is every match and `count` is this page; when `nextOffset` is set and the user wants more, call again with `offset: nextOffset`. Say so when you are only showing part of the list.
 3. Use `conjuro_get_task` with a `taskId` from the results when the user wants the details of one task.
 4. Summarise results as a short list: name, project, status, due date. Don't dump raw JSON.
@@ -43,6 +43,12 @@ Use this to keep an existing task current (a new due date, a blocker, a new owne
 2. Confirm the change with the user ("Move *Send Q3 invoice* to 31 October?").
 3. Call `conjuro_update_task` with the `taskId` and only the fields that change: `name`, `notes` (replaces) or `appendNote` (adds a dated line, preferred for progress and blockers), `status` (`Pending`, `In Progress`, `Waiting`), `priority`, `dueDate`, `timeframe`, `ownerId`, `waitingReason`, `waitingOnId`, `waitingCheckAgainAt`, `milestone`. Setting `status: "Waiting"` needs a `waitingReason`. Pass an `idempotencyKey` if you may retry.
 4. The result lists the `changed` fields. If it says `confirmed: false`, tell the user which fields in `unconfirmed` Conjuro didn't show yet.
+
+## Slipping tasks
+
+Conjuro moves unfinished scheduled tasks forward each night (to the next day, week, month, or year, by the task's timeframe) and counts each move as a postponement, so a due date in the past is rare and is not the signal. A task is **slipping** when it has been postponed more times than the workspace's threshold (`postponeThreshold` in search results; owners set it in Workspace settings), or when its recurring series has missed more occurrences in a row than that. Search results include `postponedCount` and, for recurring tasks, `missedStreak`. Say "slipping", not "overdue", and mention the count when it helps ("postponed 5 times; this workspace flags after 3").
+
+A recurring occurrence that isn't completed by the end of its day is closed as missed and doesn't appear in searches; its series carries the missed streak.
 
 ## Milestones
 
