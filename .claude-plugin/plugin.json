@@ -1,7 +1,7 @@
 {
   "name": "conjuro",
   "displayName": "Conjuro",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Connect Claude to Conjuro: search and manage tasks and milestones, read and reply to team chat, and work your sales pipeline, with permissions you control per connection.",
   "author": {
     "name": "Conjuro",

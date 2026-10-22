@@ -19,6 +19,7 @@ If a write tool is missing or returns `[permission_missing:conjuro.crm.write]`, 
 ## Look things up first
 
 - Call `conjuro_get_pipeline_options` before any write that needs a stage, category, or source. Use only ids it returns; never invent one.
+- When the choice isn't obvious, call `conjuro_list_categories` with `kind` `pipeline_stage`, `customer_category`, or `lead_source`: each entry has the workspace's `notes` on when to use it, plus `isDefault` (and `isWin` / `isLost` for stages). Choose by the notes, fall back to the default, and ask the user when two fit.
 - Find the customer with `conjuro_search_customers`. If more than one matches, ask the user which.
 
 ## Confirm every change
