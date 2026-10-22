@@ -1,0 +1,15 @@
+{
+  "name": "conjuro",
+  "description": "Conjuro's plugin for Claude",
+  "owner": {
+    "name": "Conjuro",
+    "url": "https://live.conjuro.app"
+  },
+  "plugins": [
+    {
+      "name": "conjuro",
+      "source": "./",
+      "description": "Connect Claude to Conjuro tasks, chat, and pipeline through Conjuro's MCP server."
+    }
+  ]
+}

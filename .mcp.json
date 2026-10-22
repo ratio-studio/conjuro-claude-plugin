@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "conjuro": {
+      "type": "http",
+      "url": "https://live.conjuro.app/mcp"
+    }
+  }
+}
