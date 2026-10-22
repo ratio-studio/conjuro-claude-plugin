@@ -30,11 +30,12 @@ If you need a `projectId`, get it from `conjuro_list_projects` rather than guess
 
 Search first: if a matching task already exists, offer to update it with `conjuro_update_task` instead of creating a duplicate.
 
-1. Collect the task name. Only ask for other details (project, due date as `YYYY-MM-DD`, priority, notes) when the user mentioned them or they matter.
-   For a category, call `conjuro_list_categories` with `kind: "task"` and pass the chosen `id` as `categoryId`. Each category has the workspace's `notes` on when to use it and may name a `defaultOwner`; choose by the notes, use the `isDefault` one when nothing fits better, and ask the user when two fit. Never invent an id.
-2. Show the user what you will create (name, project, due date, anything else you set) and wait for a clear yes.
-3. Call `conjuro_create_task`. It requires an `idempotencyKey` (8–200 characters): generate a fresh random one (for example a UUID) for each new task. If the call fails or times out and you retry the **same** task, reuse the same key so Conjuro doesn't create a duplicate.
-4. Report the result. The tool reads the task back and returns a short summary (`verbose: true` returns the full record); say whether it was `confirmed`.
+1. Collect the task name. Only ask for other details (project, priority, notes) when the user mentioned them or they matter.
+2. **Always set a category.** Call `conjuro_list_categories` with `kind: "task"` and pass the chosen `id` as `categoryId`. Each category has the workspace's `notes` on when to use it and may name a `defaultOwner`; choose by the notes, use the `isDefault` one when nothing fits better, and ask the user when two fit. Never invent an id.
+3. **Ask when it should be done; don't pick a date yourself.** Unless the user already said, ask: today, this week, this month, this year, a specific date, or unscheduled. Then set `timeframe` (`day`, `week`, `month`, or `year`) and `dueDate` (`YYYY-MM-DD`) to the last day of that period; for a specific date, use `timeframe: "day"` and that date. For several tasks at once, ask once for the batch. If the user chooses unscheduled, leave both out and tell them the task won't appear in the Today, Week, Month, or Longterm lanes, only in the collapsed **Unscheduled** section of the task view.
+4. Show the user what you will create (name, project, category, schedule, anything else you set) and wait for a clear yes.
+5. Call `conjuro_create_task`. It requires an `idempotencyKey` (8–200 characters): generate a fresh random one (for example a UUID) for each new task. If the call fails or times out and you retry the **same** task, reuse the same key so Conjuro doesn't create a duplicate.
+6. Report the result. The tool reads the task back and returns a short summary (`verbose: true` returns the full record); say whether it was `confirmed`.
 
 ## Update a task
 
