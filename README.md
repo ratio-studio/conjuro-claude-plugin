@@ -1,6 +1,6 @@
 # Conjuro for Claude
 
-A Claude Code plugin that connects Claude to [Conjuro](https://live.conjuro.app) through Conjuro's MCP server. Once installed and signed in, Claude can search your tasks and projects, catch up on team conversations, and work your sales pipeline. It can only make changes you have allowed.
+A Claude Code plugin that connects Claude to [Conjuro](https://conjuro.app) through Conjuro's MCP server. Once installed and signed in, Claude can search your tasks and projects, catch up on team conversations, and work your sales pipeline. It can only make changes you have allowed.
 
 This repository is also a plugin marketplace named `conjuro`, so you can install the plugin with two commands.
 
@@ -94,6 +94,8 @@ Uninstalling the plugin doesn't revoke the connection on Conjuro's side; revoke 
 ## Data and network use
 
 The plugin contains no code that runs on your machine. Its only network endpoint is Conjuro's MCP server at `https://live.conjuro.app/mcp` (plus Conjuro's OAuth endpoints on the same host during sign-in). Tool results come from your Conjuro workspace and are shown to Claude to answer your requests.
+
+Conjuro's [Privacy Policy](https://conjuro.app/privacy) and [Terms of Service](https://conjuro.app/terms) apply to your use of Conjuro through this plugin.
 
 ## Development
 

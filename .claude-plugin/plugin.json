@@ -5,8 +5,19 @@
   "description": "Connect Claude to Conjuro: search and manage tasks, read and reply to team chat, and work your sales pipeline, with permissions you control per connection.",
   "author": {
     "name": "Conjuro",
-    "url": "https://live.conjuro.app"
+    "url": "https://conjuro.app"
   },
-  "homepage": "https://live.conjuro.app",
-  "keywords": ["conjuro", "tasks", "projects", "crm", "pipeline", "chat", "mcp"]
+  "homepage": "https://conjuro.app",
+  "keywords": [
+    "conjuro",
+    "tasks",
+    "projects",
+    "crm",
+    "pipeline",
+    "chat",
+    "mcp"
+  ],
+  "icon": "./.claude-plugin/icon.png",
+  "privacyPolicyUrl": "https://conjuro.app/privacy",
+  "termsOfServiceUrl": "https://conjuro.app/terms"
 }

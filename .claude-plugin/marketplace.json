@@ -3,7 +3,7 @@
   "description": "Conjuro's plugin for Claude",
   "owner": {
     "name": "Conjuro",
-    "url": "https://live.conjuro.app"
+    "url": "https://conjuro.app"
   },
   "plugins": [
     {
