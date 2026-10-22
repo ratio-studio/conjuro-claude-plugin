@@ -117,4 +117,4 @@ claude plugin install conjuro@conjuro
 
 ## License
 
-Copyright 2026 ratio.dev. Licensed under the [Apache License, Version 2.0](LICENSE). The Conjuro name and logo aren't covered by the license.
+Copyright 2026 Local Ventures & Investments, LLC (d/b/a ratio.dev). Licensed under the [Apache License, Version 2.0](LICENSE). The Conjuro name and logo aren't covered by the license.
