@@ -114,3 +114,7 @@ claude plugin marketplace add ./
 ```bash
 claude plugin install conjuro@conjuro
 ```
+
+## License
+
+Copyright 2026 Conjuro. Licensed under the [Apache License, Version 2.0](LICENSE). The Conjuro name and logo are trademarks of Conjuro and aren't covered by the license.

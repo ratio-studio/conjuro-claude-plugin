@@ -19,5 +19,6 @@
   ],
   "icon": "./.claude-plugin/icon.png",
   "privacyPolicyUrl": "https://conjuro.app/privacy",
-  "termsOfServiceUrl": "https://conjuro.app/terms"
+  "termsOfServiceUrl": "https://conjuro.app/terms",
+  "license": "Apache-2.0"
 }
