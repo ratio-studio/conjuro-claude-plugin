@@ -1,8 +1,8 @@
 {
   "name": "conjuro",
   "displayName": "Conjuro",
-  "version": "0.2.3",
-  "description": "Connect Claude to Conjuro: search and manage tasks and milestones, read and reply to team chat, and work your sales pipeline, with permissions you control per connection.",
+  "version": "0.3.0",
+  "description": "Connect Claude to Conjuro: search and manage tasks and milestones, read meetings and transcripts, draft and send invoices, read and reply to team chat, and work your sales pipeline, with permissions you control per connection.",
   "author": {
     "name": "Conjuro",
     "url": "https://conjuro.app"
@@ -15,7 +15,9 @@
     "crm",
     "pipeline",
     "chat",
-    "mcp"
+    "mcp",
+    "meetings",
+    "invoices"
   ],
   "icon": "./.claude-plugin/icon.png",
   "privacyPolicyUrl": "https://conjuro.app/privacy",
