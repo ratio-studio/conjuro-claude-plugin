@@ -32,10 +32,32 @@ Search first: if a matching task already exists, offer to update it with `conjur
 
 1. Collect the task name. Only ask for other details (project, priority, notes) when the user mentioned them or they matter.
 2. **Always set a category.** Call `conjuro_list_categories` with `kind: "task"` and pass the chosen `id` as `categoryId`. Each category has the workspace's `notes` on when to use it and may name a `defaultOwner`; choose by the notes, use the `isDefault` one when nothing fits better, and ask the user when two fit. Never invent an id.
-3. **Ask when it should be done; don't pick a date yourself.** Unless the user already said, ask: today, this week, this month, this year, a specific date, or unscheduled. Then set `timeframe` (`day`, `week`, `month`, or `year`) and `dueDate` (`YYYY-MM-DD`) to the last day of that period; for a specific date, use `timeframe: "day"` and that date. For several tasks at once, ask once for the batch. If the user chooses unscheduled, leave both out and tell them the task won't appear in the Today, Week, Month, or Longterm lanes, only in the collapsed **Unscheduled** section of the task view.
+3. **Ask when it should be done; don't pick a date yourself.** Unless the user already said, ask: today, this week, this month, this year, a specific date, or unscheduled. Then set `timeframe` and `dueDate` from the user's words with the table in **Turn what the user says into a schedule** below. For several tasks at once, ask once for the batch. If the user chooses unscheduled, leave both out and tell them the task won't appear in the Today, Week, Month, or Longterm lanes, only in the collapsed **Unscheduled** section of the task view.
 4. Show the user what you will create (name, project, category, schedule, anything else you set) and wait for a clear yes.
 5. Call `conjuro_create_task`. It requires an `idempotencyKey` (8–200 characters): generate a fresh random one (for example a UUID) for each new task. If the call fails or times out and you retry the **same** task, reuse the same key so Conjuro doesn't create a duplicate.
 6. Report the result. The tool reads the task back and returns a short summary (`verbose: true` returns the full record); say whether it was `confirmed`.
+
+## Turn what the user says into a schedule
+
+Conjuro's task view (including **Get Stuff Done**) places a task in a lane or column by its `timeframe` together with its `dueDate`. A **period** task is due on the **last day of its period**, so it shows up in that period's column, not on a particular day. Weeks run **Monday to Sunday**, so a week task is due on the **Sunday** that ends its week. A month task is due on the month's last day, and a year task on 31 December. You can confirm this from existing tasks: every `timeframe: "week"` task in a workspace shares the same Sunday `dueDate`.
+
+| The user says | `timeframe` | `dueDate` |
+|---|---|---|
+| "today" | `day` | today |
+| "tomorrow", "on Thursday", "on 3 November", "by Friday" (one named day) | `day` | that date |
+| "this week", "sometime this week", "by the end of the week" | `week` | Sunday of the current week |
+| "next week", "schedule it for next week", "sometime next week" | `week` | Sunday of next week (this puts it in next week's column) |
+| "in two weeks", "the week of 9 November" | `week` | Sunday of that week |
+| "this month", "later this month" | `month` | last day of this month |
+| "next month", "in November" | `month` | last day of that month |
+| "this year", "later this year", "longer term" | `year` | 31 December this year |
+| "next year" | `year` | 31 December next year |
+| "someday", "no date", "just capture it" | omit both | omit both (Unscheduled) |
+
+- **Don't turn a period into days.** When the user gives several tasks for "next week", give every one `timeframe: "week"` and the same Sunday. Don't spread them across Monday, Wednesday and Friday unless the user named those days. Spreading them makes them day tasks and moves them out of the week column.
+- A named day beats a period: "next Tuesday" is `day` with that Tuesday's date.
+- Work the dates out from today's date in the user's time zone, and say the result in words when confirming ("week of 26 October, due Sunday 1 November").
+- If you're unsure which convention a workspace uses, look at a few existing tasks with the same `timeframe` (`conjuro_search_tasks` with `dueAfter` today) and copy their pattern before writing.
 
 ## Update a task
 
@@ -44,7 +66,7 @@ Use this to keep an existing task current (a new due date, a blocker, a new owne
 1. Identify the exact task with `conjuro_search_tasks` or `conjuro_get_task`.
 2. Confirm the change with the user ("Move *Send Q3 invoice* to 31 October?").
 3. Call `conjuro_update_task` with the `taskId` and only the fields that change: `name`, `notes` (replaces) or `appendNote` (adds a dated line, preferred for progress and blockers), `status` (`Pending`, `In Progress`, `Waiting`), `priority`, `dueDate`, `timeframe`, `ownerId`, `waitingReason`, `waitingOnId`, `waitingCheckAgainAt`, `milestone`, `categoryId` (from `conjuro_list_categories`). Setting `status: "Waiting"` needs a `waitingReason`. Pass an `idempotencyKey` if you may retry.
-4. The result lists the `changed` fields. If it says `confirmed: false`, tell the user which fields in `unconfirmed` Conjuro didn't show yet.
+4. The result lists the `changed` fields. If it says `confirmed: false`, read the task back with `conjuro_get_task`. If a field in `unconfirmed` still shows the old value, the change didn't save: tell the user which field, and don't report it as done. Rescheduling uses the same table as creating ("move it to next week" is `timeframe: "week"` plus that week's Sunday).
 
 ## Slipping tasks
 
