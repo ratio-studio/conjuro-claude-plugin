@@ -8,7 +8,7 @@ This repository is also a plugin marketplace named `conjuro`, so you can install
 
 - **MCP server** `conjuro`, a remote HTTP server at `https://live.conjuro.app/mcp`. It appears in `/mcp` as `plugin:conjuro:conjuro`. Sign-in uses OAuth; no API key is stored in this plugin.
 - **Skills** that teach Claude how to use Conjuro safely:
-  - `conjuro-tasks`: find, create, and complete tasks.
+  - `conjuro-tasks`: find, create, and complete tasks, and record, review, and invoice tracked time.
   - `conjuro-chat`: read conversations and reply on your behalf, always after you approve the exact text.
   - `conjuro-pipeline`: look up customers and create, update, move, or archive leads, confirming each change.
 
@@ -60,7 +60,7 @@ Each Claude connection to Conjuro has its own permissions, and Conjuro checks th
 | Read tasks | Search and read tasks | On |
 | Read projects and project updates | List projects, health, and updates | On |
 | Read customers | Search customers; read pipeline stages, categories, and sources | On |
-| Create and complete tasks | Create tasks; mark them complete | **Off** |
+| Create, update and complete tasks | Create and change tasks; mark them complete; record and review time; mark time invoiced | **Off** |
 | Create, update, move, and archive leads and customers | Change the pipeline | **Off** |
 | Read your chat conversations | List and read conversations | **Off** |
 | Send chat messages as you and mark conversations read | Reply as you (shown "via" Claude) | **Off** |
