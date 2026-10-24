@@ -28,6 +28,14 @@ Call `conjuro_list_invoices`. Filter with `status` (`draft`, `finalized`, `paid`
 3. Call `conjuro_create_invoice` with all the lines and a fresh `idempotencyKey`. Conjuro numbers the draft and calculates the totals; nothing is sent.
 4. Report the invoice number and the total Conjuro calculated. If the result says only some lines were saved, tell the user to finish the draft in Conjuro. Don't create another invoice.
 
+## Bill tracked time
+
+When the user wants to invoice tracked time:
+
+1. Find what is ready with `conjuro_search_tasks` and `reviewed: true`, `invoiced: false` (plus the `projectId`). Group by customer and project; one invoice covers one customer and project.
+2. Draft the invoice as above, one line per task (or per category if the user prefers), using each task's `time.hours` as the quantity and `time.price` ÷ `time.hours` (the project's rate) as the unit price, so the line totals match `time.price`.
+3. Only after the user confirms the time has been billed, mark each task with `conjuro_mark_task_invoiced` (see the `conjuro-tasks` skill), so the same time isn't billed twice. Drafting an invoice doesn't mark tasks invoiced on its own.
+
 ## Finalize and send
 
 Finalizing locks the invoice, finalizes it in Stripe, **emails it to the customer to pay**, and uses 25 AMP cents. It cannot be undone.
